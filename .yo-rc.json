@@ -1,0 +1,28 @@
+{
+  "generator-trigen-app": {
+    "editPackage": true,
+    "pkg": {
+      "name": "@common-steam-games/client",
+      "version": "1.0.0",
+      "description": "Test task from chatra",
+      "repository": "",
+      "author": "dangreen",
+      "license": "MIT"
+    },
+    "editWebman": true,
+    "webman": {
+      "name": "@common-steam-games/client",
+      "short_name": "common-games",
+      "description": "Test task from chatra",
+      "dir": "auto",
+      "lang": "en-US",
+      "display": "standalone",
+      "orientation": "portrait",
+      "scope": "/",
+      "start_url": "/?homescreen=1",
+      "background_color": "#fff",
+      "theme_color": "#fff"
+    },
+    "gitInit": false
+  }
+}

@@ -1,0 +1,32 @@
+
+:import {
+	-st-from: '~/components/variables.st.css';
+	-st-named:
+		colorBrandDanger,
+		sizeGapSmall;
+}
+
+.root {
+	margin: value(sizeGapSmall);
+}
+
+.textarea {
+	min-height: 10em;
+}
+
+.error {
+	margin: value(sizeGapSmall) 0;
+	color: value(colorBrandDanger);
+}
+
+.game {
+	margin: value(sizeGapSmall) 0;
+}
+
+.loading {
+	text-align: center;
+}
+
+.spinner {
+	font-size: 1em;
+}
