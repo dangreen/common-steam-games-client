@@ -7,11 +7,17 @@
 }
 
 .root {
-	margin: value(sizeGapSmall);
+	margin: 0 auto;
+	padding: value(sizeGapSmall);
+	max-width: 800px;
 }
 
 .textarea {
 	min-height: 10em;
+}
+
+.footer {
+	text-align: center;
 }
 
 .error {

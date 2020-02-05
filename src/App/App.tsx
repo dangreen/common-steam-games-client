@@ -16,6 +16,7 @@ import Textarea from '~/components/Textarea';
 import Button from '~/components/Button';
 import SROnly from '~/components/SROnly';
 import Spinner from '~/components/Spinner';
+import Link from '~/components/Link';
 import {
 	classes
 } from './App.st.css';
@@ -30,8 +31,9 @@ interface IState {
 
 const maxLinksCount = 20;
 const linkPattern = /^https:\/\/steamcommunity\.com\/id\/[^/]+\/?$/;
+const linkExample = 'https://steamcommunity.com/id/molotoko';
 const linksPlaceholder = `
-https://steamcommunity.com/id/molotoko
+${linkExample}
 https://steamcommunity.com/id/Tryr
 https://steamcommunity.com/id/gwellir
 `.trim();
@@ -64,6 +66,9 @@ export default class App extends Component<{}, IState> {
 				className={classes.root}
 				onSubmit={this.onSubmit}
 			>
+				<h1>
+					Common steam games search
+				</h1>
 				<FormGroup
 					label='Users links:'
 				>
@@ -101,7 +106,12 @@ export default class App extends Component<{}, IState> {
 							key={id}
 							className={classes.game}
 						>
-							{name}
+							<Link
+								href={`https://store.steampowered.com/app/${id}`}
+								target='_blank'
+							>
+								{name}
+							</Link>
 						</li>
 					))}
 				</ul>
@@ -160,15 +170,28 @@ export default class App extends Component<{}, IState> {
 		const {
 			target
 		} = event;
+		const {
+			validity
+		} = target;
 		const links = value.trim().split('\n').map(_ => _.trim()).filter(Boolean);
-		const isValid = links.every(_ => linkPattern.test(_))
-			&& links.length > 1
-			&& links.length <= maxLinksCount;
 
-		if (isValid) {
-			target.setCustomValidity('');
-		} else {
-			target.setCustomValidity('Invalid links.');
+		switch (true) {
+
+			case validity.valueMissing:
+			default:
+				target.setCustomValidity('');
+				break;
+
+			case links.length <= 1:
+				target.setCustomValidity('You should provide minimum 2 links.');
+				break;
+
+			case links.length > maxLinksCount:
+				target.setCustomValidity(`You should provide maximum ${maxLinksCount} links.`);
+				break;
+
+			case links.some(_ => !linkPattern.test(_)):
+				target.setCustomValidity(`You should provide links to steam profiles. Example: ${linkExample}`);
 		}
 
 		this.setState(() => ({
