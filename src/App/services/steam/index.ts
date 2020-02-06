@@ -1,38 +1,38 @@
-import createSocket from 'socket.io-client';
-
-const socket = createSocket(process.env.BACKEND_WS_HOST);
+import {
+	CancelToken
+} from '~/services/axios';
+import axios from './client';
 
 export interface IAppInfo {
 	id: number;
 	name: string;
 }
 
-export interface IMessage {
-	event: string;
-	done: boolean;
-	game?: IAppInfo;
-}
+export async function fetchCommonGames(links: string[], cancelToken?: CancelToken) {
 
-export interface IError {
-	message: string;
-}
+	try {
 
-export function onMessage(listener: (message: IMessage) => void) {
+		const {
+			data
+		} = await axios.post<IAppInfo[]>('/common-multiplayer-games', {
+			links
+		}, {
+			cancelToken
+		});
 
-	socket.on('commonMultiplayerGames', listener);
+		return data;
 
-	return () => socket.off('commonMultiplayerGames', listener);
-}
+	} catch (err) {
 
-export function onException(listener: (error: IError) => void) {
+		if (err.response) {
 
-	socket.on('exception', listener);
+			const {
+				message
+			} = err.response.data;
 
-	return () => socket.off('exception', listener);
-}
+			throw new Error(message);
+		}
 
-export function searchCommonGames(links: string[]) {
-	socket.emit('commonMultiplayerGames', {
-		links
-	});
+		throw err;
+	}
 }

@@ -37,7 +37,7 @@ yarn serve
 To be able to build this app, you should provide some environment variables:
 
 ```bash
-BACKEND_WS_HOST=ws://localhost:3003 # string;
+BACKEND_HOST=http://localhost:3003 # string;
 ```
 
 Optional variables:

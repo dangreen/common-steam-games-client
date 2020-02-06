@@ -10,6 +10,10 @@ import {
 	Bind
 } from '@flexis/ui/helpers';
 import '@flexis/ui/reboot.st.css';
+import {
+	getCancelToken,
+	isCancelToken
+} from '~/services/axios';
 import * as steamService from '~/services/steam';
 import FormGroup from '~/components/FormGroup';
 import Textarea from '~/components/Textarea';
@@ -29,13 +33,12 @@ interface IState {
 	error: string;
 }
 
+const SearchCommonGamesCancellationKey = Symbol('SearchCommonGamesCancellationKey');
 const maxLinksCount = 20;
-const linkPattern = /^https:\/\/steamcommunity\.com\/id\/[^/]+\/?$/;
-const linkExample = 'https://steamcommunity.com/id/molotoko';
 const linksPlaceholder = `
-${linkExample}
-https://steamcommunity.com/id/Tryr
-https://steamcommunity.com/id/gwellir
+https://steamcommunity.com/profiles/76561197999469156
+https://steamcommunity.com/id/molotoko
+Tryr
 `.trim();
 
 @hot(module)
@@ -48,9 +51,6 @@ export default class App extends Component<{}, IState> {
 		inProgress: false,
 		error:      ''
 	};
-
-	private removeMessageListener: () => void = null;
-	private removeExceptionListener: () => void = null;
 
 	render() {
 
@@ -133,37 +133,6 @@ export default class App extends Component<{}, IState> {
 		);
 	}
 
-	componentDidMount() {
-
-		this.removeMessageListener = steamService.onMessage(({
-			game,
-			done
-		}) => {
-			this.setState(({
-				games
-			}) => ({
-				games:      !game ? games : [
-					...games,
-					game
-				],
-				inProgress: !done
-			}));
-		});
-
-		this.removeExceptionListener = steamService.onException((error) => {
-			this.setState(() => ({
-				error:      error.message,
-				games:      [],
-				inProgress: false
-			}));
-		});
-	}
-
-	componentWillUnmount() {
-		this.removeMessageListener();
-		this.removeExceptionListener();
-	}
-
 	@Bind()
 	onLinksChange(value: string, event: ChangeEvent<HTMLTextAreaElement>) {
 
@@ -173,7 +142,7 @@ export default class App extends Component<{}, IState> {
 		const {
 			validity
 		} = target;
-		const links = value.trim().split('\n').map(_ => _.trim()).filter(Boolean);
+		const links = value.trim().split(/,|\s/).map(_ => _.trim()).filter(Boolean);
 
 		switch (true) {
 
@@ -188,10 +157,6 @@ export default class App extends Component<{}, IState> {
 
 			case links.length > maxLinksCount:
 				target.setCustomValidity(`You should provide maximum ${maxLinksCount} links.`);
-				break;
-
-			case links.some(_ => !linkPattern.test(_)):
-				target.setCustomValidity(`You should provide links to steam profiles. Example: ${linkExample}`);
 		}
 
 		this.setState(() => ({
@@ -210,12 +175,36 @@ export default class App extends Component<{}, IState> {
 			links
 		} = this.state;
 
+		this.searchCommonGames(links);
+	}
+
+	private async searchCommonGames(links: string[]) {
+
 		this.setState(() => ({
 			games:      [],
 			inProgress: true,
 			error:      ''
 		}));
 
-		steamService.searchCommonGames(links);
+		try {
+
+			const games = await steamService.fetchCommonGames(
+				links,
+				getCancelToken(SearchCommonGamesCancellationKey)
+			);
+
+			this.setState(() => ({
+				games,
+				inProgress: false
+			}));
+
+		} catch (err) {
+
+			this.setState(() => ({
+				games:      [],
+				inProgress: isCancelToken(err),
+				error:      err.message
+			}));
+		}
 	}
 }
