@@ -4,7 +4,13 @@
 	-st-named: sizeGapSmall;
 }
 
+:vars {
+	sizeImgWidth: 200;
+	sizeImgHeight: 93.47;
+}
+
 .root {
+	margin: 0;
 	padding: 0;
 	list-style: none;
 }
@@ -14,13 +20,24 @@
 }
 
 .link {
-	display: block;
+	display: flex;
+	align-items: center;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.img {
-	margin-right: value(sizeGapSmall);
+.figure {
+	position: relative;
+	margin: 0 value(sizeGapSmall) 0 0;
+	padding: calc(value(sizeImgHeight) / 2 * 100% / 800) 0;
 	width: 25%;
+	max-width: calc(value(sizeImgWidth) * 1px);
+}
+
+.img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
 }

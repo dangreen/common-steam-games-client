@@ -26,6 +26,7 @@
 }
 
 .loading {
+	margin: value(sizeGapSmall) 0;
 	text-align: center;
 }
 

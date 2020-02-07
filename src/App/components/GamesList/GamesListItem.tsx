@@ -48,11 +48,16 @@ export class GamesListItem extends Component<IGamesListItemProps> {
 					href={`https://store.steampowered.com/app/${id}`}
 					target='_blank'
 				>
-					<img
-						className={classes.img}
-						src={`http://cdn.akamai.steamstatic.com/steam/apps/${id}/header.jpg`}
-						loading='lazy'
-					/>
+					<figure
+						className={classes.figure}
+						aria-hidden
+					>
+						<img
+							className={classes.img}
+							src={`http://cdn.akamai.steamstatic.com/steam/apps/${id}/header.jpg`}
+							loading='lazy'
+						/>
+					</figure>
 					{name}
 				</Link>
 			</li>
