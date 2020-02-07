@@ -22,9 +22,6 @@
 .link {
 	display: flex;
 	align-items: center;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 .figure {
@@ -32,6 +29,7 @@
 	margin: 0 value(sizeGapSmall) 0 0;
 	padding: calc(value(sizeImgHeight) / 2 * 100% / 800) 0;
 	width: 25%;
+	min-width: 25%;
 	max-width: calc(value(sizeImgWidth) * 1px);
 }
 
@@ -40,4 +38,10 @@
 	top: 0;
 	left: 0;
 	width: 100%;
+}
+
+.name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }

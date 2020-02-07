@@ -58,7 +58,11 @@ export class GamesListItem extends Component<IGamesListItemProps> {
 							loading='lazy'
 						/>
 					</figure>
-					{name}
+					<span
+						className={classes.name}
+					>
+						{name}
+					</span>
 				</Link>
 			</li>
 		);
