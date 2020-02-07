@@ -25,10 +25,6 @@
 	color: value(colorBrandDanger);
 }
 
-.game {
-	margin: value(sizeGapSmall) 0;
-}
-
 .loading {
 	text-align: center;
 }

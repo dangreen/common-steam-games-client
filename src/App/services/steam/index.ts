@@ -1,7 +1,9 @@
 import {
 	CancelToken
 } from '~/services/axios';
-import axios from './client';
+import axios, {
+	getErrorMessage
+} from './client';
 
 export interface IAppInfo {
 	id: number;
@@ -25,12 +27,9 @@ export async function fetchCommonGames(links: string[], cancelToken?: CancelToke
 	} catch (err) {
 
 		if (err.response) {
-
-			const {
-				message
-			} = err.response.data;
-
-			throw new Error(message);
+			throw new Error(
+				getErrorMessage(err.response.data)
+			);
 		}
 
 		throw err;

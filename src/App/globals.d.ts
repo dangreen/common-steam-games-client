@@ -8,3 +8,10 @@ declare module '*.st.css' {
 	const stylesheet: import('@stylable/runtime').RuntimeStylesheet;
 	export = stylesheet;
 }
+
+declare namespace React {
+	// tslint:disable-next-line
+	interface ImgHTMLAttributes<T> {
+		loading?: string;
+	}
+}

@@ -1,0 +1,26 @@
+
+:import {
+	-st-from: '~/components/variables.st.css';
+	-st-named: sizeGapSmall;
+}
+
+.root {
+	padding: 0;
+	list-style: none;
+}
+
+.item {
+	margin: value(sizeGapSmall) 0;
+}
+
+.link {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.img {
+	margin-right: value(sizeGapSmall);
+	width: 25%;
+}

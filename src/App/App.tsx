@@ -20,7 +20,9 @@ import Textarea from '~/components/Textarea';
 import Button from '~/components/Button';
 import SROnly from '~/components/SROnly';
 import Spinner from '~/components/Spinner';
-import Link from '~/components/Link';
+import GamesList, {
+	GamesListItem
+ } from '~/components/GamesList';
 import {
 	classes
 } from './App.st.css';
@@ -74,6 +76,7 @@ export default class App extends Component<{}, IState> {
 				>
 					<Textarea
 						className={classes.textarea}
+						id='links'
 						name='links'
 						placeholder={linksPlaceholder}
 						required
@@ -97,24 +100,14 @@ export default class App extends Component<{}, IState> {
 						{error}
 					</p>
 				)}
-				<ul>
-					{games.map(({
-						id,
-						name
-					}) => (
-						<li
-							key={id}
-							className={classes.game}
-						>
-							<Link
-								href={`https://store.steampowered.com/app/${id}`}
-								target='_blank'
-							>
-								{name}
-							</Link>
-						</li>
+				<GamesList>
+					{games.map(game => (
+						<GamesListItem
+							key={game.id}
+							{...game}
+						/>
 					))}
-				</ul>
+				</GamesList>
 				{inProgress && (
 					<div
 						className={classes.loading}
@@ -143,6 +136,7 @@ export default class App extends Component<{}, IState> {
 			validity
 		} = target;
 		const links = value.trim().split(/,|\s/).map(_ => _.trim()).filter(Boolean);
+		const uniqueLinks = new Set(links);
 
 		switch (true) {
 
@@ -153,6 +147,10 @@ export default class App extends Component<{}, IState> {
 
 			case links.length <= 1:
 				target.setCustomValidity('You should provide minimum 2 links.');
+				break;
+
+			case uniqueLinks.size !== links.length:
+				target.setCustomValidity('You should provide unique links list.');
 				break;
 
 			case links.length > maxLinksCount:
