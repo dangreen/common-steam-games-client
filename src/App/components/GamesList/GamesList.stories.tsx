@@ -34,7 +34,7 @@ storiesOf('Components|GamesList', module)
 
 			const gamesCount = number('Games count', 3);
 			const games = Array.from({ length: gamesCount }, (_, i) => ({
-				id: number(`Game #${i} id`, (i + 1) * 10),
+				id:   number(`Game #${i} id`, (i + 1) * 10),
 				name: text(`Game #${i} name`, `Game #${i} name`)
 			}));
 
